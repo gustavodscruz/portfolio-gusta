@@ -5,7 +5,7 @@ import { ModeToggle } from "@/components/mode-toggle";
 import { GithubIcon, LinkedinIcon, Mail } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
-import Typewriter from 'typewriter-effect';
+import Typewrite from "@/components/typewrite";
 
 
 export default function Home() {
@@ -52,14 +52,13 @@ export default function Home() {
           </div>
         </section>
 
-        <section>
+        <section className="flex flex-col items-center">
           <span className="text-3xl font-bold mb-8">
-            <Typewriter options={{
-              autoStart: true,
-              strings: [ 'Who I am?', 'About me', 'What I do?' ],
-              loop: true
-            }} />
+            <Typewrite texts={['About me', 'Who I am', 'More about me']}  />
           </span>
+          <p className="text-muted-foreground max-w-3xl my-3 text-center">
+          I'm a passionate learner, skilled in developing Back-End and Front-End applications with various technologies like Java, Node.js, React.js, and SQL databases. Proficient in methodologies like Kanban and Scrum, I excel in teamwork. Currently, I'm training as an Analyst and Developer at FIAP, aiming to become a top full-stack developer.
+          </p>
 
         </section>
 
