@@ -5,6 +5,8 @@ import { ModeToggle } from "@/components/mode-toggle";
 import { GithubIcon, LinkedinIcon, Mail } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
+import Typewriter from 'typewriter-effect';
+
 
 export default function Home() {
   return (
@@ -48,6 +50,17 @@ export default function Home() {
               </a>
             </div>
           </div>
+        </section>
+
+        <section>
+          <span className="text-3xl font-bold mb-8">
+            <Typewriter options={{
+              autoStart: true,
+              strings: [ 'Who I am?', 'About me', 'What I do?' ],
+              loop: true
+            }} />
+          </span>
+
         </section>
 
         <section className="mb-16">
