@@ -1,5 +1,5 @@
 import { notFound } from 'next/navigation';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, GithubIcon } from 'lucide-react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Card, CardHeader, CardContent } from '@/components/ui/card';
@@ -9,14 +9,20 @@ import { Project } from '@/lib/types';
 
 
 async function getProject(id: number): Promise<Project | null> {
-  const res = await fetch(`api/projects/${id}`);
-
-  if (!res.ok) {
+  
+  try {
+    console.log('Id recebido na página next: ', id);
+    const res = await fetch(`http://localhost:3000/api/projects/${id}`);
+    if (!res.ok) {
+      throw new Error('Falha ao buscar projeto');
+    }
+    const project = await res.json();
+    return project as Project;
+        
+  } catch (error) {
+    console.error('Erro ao buscar projeto: ', (error as Error).message);
     return null;
   }
-
-  const project = await res.json();
-  return project as Project;
 }
 
 type SingleProjectProps = {
@@ -41,19 +47,18 @@ export default async function SingleProject({ params }: SingleProjectProps) {
           </Link>
           <h1 className="text-2xl font-bold">Detalhes do Projeto</h1>
           <div className="flex items-center gap-4">
-            {/* Outros componentes, como ModeToggle, se necessário */}
           </div>
         </div>
       </nav>
 
       <div className="container py-12">
         <section className="mb-16">
-          <Card>
+          <Card className='p-6 size-max m-auto'>
             <CardHeader>
-              <h2 className="text-3xl font-bold mb-4">{project.proj_name}</h2>
+              <h2 className="text-3xl font-bold mb-4 text-center">{project.proj_name}</h2>
             </CardHeader>
-            <CardContent>
-              <p className="mb-4">{project.proj_desc}</p>
+            <CardContent className='m-auto flex flex-col items-center'>
+              <p className="mb-4 text-center">{project.proj_desc}</p>
               {project.proj_image_url && (
                 <Image
                   src={project.proj_image_url}
@@ -69,7 +74,7 @@ export default async function SingleProject({ params }: SingleProjectProps) {
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  <Button variant="outline">Ver no GitHub</Button>
+                  <Button variant="outline" className='flex gap-2'><span>Ver no GitHub</span> <GithubIcon color='#000' size={20}/> </Button>
                 </a>
               )}
             </CardContent>

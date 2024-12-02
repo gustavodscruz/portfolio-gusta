@@ -6,9 +6,20 @@ import { GithubIcon, LinkedinIcon, Mail } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import Typewrite from "@/components/typewrite";
+import { Certificate, Project } from "@/lib/types";
 
+export default async function Home() {
+  // Buscando os projetos da API
+  let res = await fetch('http://localhost:3000/api/projects', {
+    cache: 'no-store',
+  });
+  const projects: Project[] = await res.json();
 
-export default function Home() {
+  res = await fetch('http://localhost:3000/api/certificates', {
+    cache: 'no-store',
+  });
+  const certificates : Certificate[] = await res.json(); 
+
   return (
     <main className="min-h-screen bg-background flex flex-col justify-center items-center">
       <nav className="border-b w-full px-3">
@@ -26,8 +37,13 @@ export default function Home() {
       <div className="container py-12">
         <section className="mb-16">
           <div className="flex flex-col items-center text-center mb-12">
-            <Image src="https://github.com/gustavodscruz.png" width={128} height={128} className="rounded-full" alt="Minha foto - Gustavo Dias | gustavodscruz"/>
-            
+            <Image
+              src="https://github.com/gustavodscruz.png"
+              width={128}
+              height={128}
+              className="rounded-full"
+              alt="Minha foto - Gustavo Dias | gustavodscruz"
+            />
             <h1 className="text-4xl font-bold mb-4">Gustavo Dias da Silva Cruz</h1>
             <p className="text-xl text-muted-foreground max-w-2xl mb-6">
               Full Stack Developer passionate about creating beautiful and functional web applications
@@ -54,62 +70,43 @@ export default function Home() {
 
         <section className="flex flex-col items-center">
           <span className="text-3xl font-bold mb-8">
-            <Typewrite texts={['About me', 'Who I am', 'More about me']}  />
+            <Typewrite texts={['About me', 'Who I am', 'More about me']} />
           </span>
           <p className="text-muted-foreground max-w-3xl my-3 text-center">
-          I'm a passionate learner, skilled in developing Back-End and Front-End applications with various technologies like Java, Node.js, React.js, and SQL databases. Proficient in methodologies like Kanban and Scrum, I excel in teamwork. Currently, I'm training as an Analyst and Developer at FIAP, aiming to become a top full-stack developer.
+            I&apos;m a passionate learner, skilled in developing Back-End and Front-End applications with various technologies like Java, Node.js, React.js, and SQL databases. Proficient in methodologies like Kanban and Scrum, I excel in teamwork. Currently, I&apos;m training as an Analyst and Developer at FIAP, aiming to become a top full-stack developer.
           </p>
-
         </section>
 
         <section className="mb-16">
           <h2 className="text-3xl font-bold mb-8">Projects</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <ProjectCard
-              title="E-commerce Platform"
-              description="A full-featured e-commerce platform built with Next.js and Stripe"
-              image="https://images.unsplash.com/photo-1472851294608-062f824d29cc"
-              tags={["Next.js", "Stripe", "Tailwind",]}
-              link="https://example.com"
-            />
-            <ProjectCard
-              title="Task Management App"
-              description="A collaborative task management application with real-time updates"
-              image="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40"
-              tags={["React", "Socket.io", "MongoDB"]}
-              link="https://example.com"
-            />
-            <ProjectCard
-              title="AI Image Generator"
-              description="An AI-powered image generation tool using DALL-E API"
-              image="https://images.unsplash.com/photo-1525785967371-87ba44b3e6cf"
-              tags={["OpenAI", "Next.js", "TypeScript"]}
-              link="https://example.com"
-            />
+            {projects.map((project) => (
+              <ProjectCard
+                key={project.proj_id}
+                title={project.proj_name}
+                description={project.proj_desc}
+                image={project.proj_image_url ?? 'https://plus.unsplash.com/premium_photo-1661290256778-3b821d52c514?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8cHJvamVjdHxlbnwwfHwwfHx8MA%3D%3D'}
+                tags={['React', 'Node.js', 'TypeScript']}
+                link={`/projects/${project.proj_id}`}
+              />
+            ))}
           </div>
         </section>
 
         <section>
           <h2 className="text-3xl font-bold mb-8">Certificates</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <CertificateCard
-              title="AWS Certified Solutions Architect"
-              issuer="Amazon Web Services"
-              date="2024"
-              image="https://images.unsplash.com/photo-1516321318423-f06f85e504b3"
-            />
-            <CertificateCard
-              title="Meta Frontend Developer"
-              issuer="Meta"
-              date="2023"
-              image="https://images.unsplash.com/photo-1551650975-87deedd944c3"
-            />
-            <CertificateCard
-              title="Google Cloud Professional"
-              issuer="Google"
-              date="2023"
-              image="https://images.unsplash.com/photo-1451187580459-43490279c0fa"
-            />
+            {
+              certificates.map((certificate) => (
+                <CertificateCard
+                  key={certificate.cert_id}
+                  cert_name={certificate.cert_name}
+                  cert_desc={certificate.cert_desc}
+                  cert_image_url={certificate.cert_image_url}
+                  cert_link={certificate.cert_id}
+                />
+              ))
+            }
           </div>
         </section>
       </div>

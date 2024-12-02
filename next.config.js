@@ -1,6 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  images: { domains: ['github.com', 'images.unsplash.com'] },
+  images: { unoptimized: true },
 };
 
 module.exports = nextConfig;

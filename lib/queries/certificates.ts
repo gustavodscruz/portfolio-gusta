@@ -1,14 +1,14 @@
 import connection from '@/lib/database';
 import { FieldPacket, RowDataPacket } from 'mysql2';
-import { Project } from '@/lib/types';
+import { Certificate } from '@/lib/types';
 
-export const findProjectById = async (id: number): Promise<Project | null> => {
+export const findCertificateById = async (id: number): Promise<Certificate | null> => {
   try {
     console.log('Id recebido para consulta SQL: ', id);
     const conn = await connection();
     console.log('Conexão estabelecida com o banco de dados');
     
-    const query = 'SELECT * FROM projeto WHERE proj_id = ?';
+    const query = 'SELECT * FROM certificado WHERE cert_id = ?';
     console.log('Query gerada: ', query, [id]);
     
     const [rows]: [RowDataPacket[], FieldPacket[]] = await conn.query(query, [id]);
@@ -18,7 +18,7 @@ export const findProjectById = async (id: number): Promise<Project | null> => {
       console.log('Nenhum projeto encontrado com o id ', id);
       return null;
     }
-    const result = rows[0] as Project;
+    const result = rows[0] as Certificate;
     console.log('Resultado da consulta:', result);
     return result;
   } catch (error) {
@@ -27,12 +27,12 @@ export const findProjectById = async (id: number): Promise<Project | null> => {
   }
 };
 
-export const findAllProjects = async (): Promise<Project[] | null> => {
+export const findAllCertificates = async (): Promise<Certificate[] | null> => {
   try {
     const conn = await connection();
     console.log('Conexão estabelecida com o banco de dados');
     
-    const query = 'SELECT * FROM projeto';
+    const query = 'SELECT * FROM certificado';
     console.log('Query gerada: ', query);
     
     const [rows]: [RowDataPacket[], FieldPacket[]] = await conn.query(query);
@@ -42,7 +42,7 @@ export const findAllProjects = async (): Promise<Project[] | null> => {
       console.log('Nenhum projeto encontrado com o id ');
       return null;
     }
-    const result = rows as Project[];
+    const result = rows as Certificate[];
     console.log('Resultado da consulta:', result);
     return result;
   } catch (error) {
