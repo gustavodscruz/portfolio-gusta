@@ -30,6 +30,12 @@ create table certificado (
     primary key (cert_id)
 );
 
+insert into certificado(cert_name, cert_desc, cert_image_url, cert_link) values 
+('Portfolio', 'Meu portfolio', 'https://neilpatel.com/wp-content/uploads/fly-images/52505/portfolio-1200x675-c.jpg', 'https://github.com/gustavodscruz/portfolio-gusta');
+
+select * from certificado;
+
+
 desc projeto;
 desc certificado;
 
