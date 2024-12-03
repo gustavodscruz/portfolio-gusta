@@ -1,20 +1,38 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ProjectForm } from "@/components/project-form";
 import { CertificateForm } from "@/components/certificate-form";
 import { useToast } from "@/components/ui/use-toast";
 import Link from "next/link";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, DeleteIcon, EditIcon } from "lucide-react";
+import { Certificate, Project } from "@/lib/types";
 
 export default function AdminPanel() {
-  const [projects, setProjects] = useState([]);
-  const [certificates, setCertificates] = useState([]);
+  const [projects, setProjects] = useState<Project[]>([]);
+  const [certificates, setCertificates] = useState<Certificate[]>([]);
   const { toast } = useToast();
 
-  const handleProjectSubmit = (data) => {
+  const loadProjects = async () => {
+    const response = await fetch("/api/projects");
+    const data : Project[] = await response.json();
+    setProjects(data);
+  }
+
+  const loadCertificates = async () => {
+    const response = await fetch("/api/certificates");
+    const data : Certificate[] = await response.json();
+    setCertificates(data);
+  }
+
+  useEffect(() => {
+    loadProjects();
+    loadCertificates();
+  }, []);
+
+  const handleProjectSubmit = (data : Project) => {
     setProjects([...projects, data]);
     toast({
       title: "Project added",
@@ -22,7 +40,7 @@ export default function AdminPanel() {
     });
   };
 
-  const handleCertificateSubmit = (data) => {
+  const handleCertificateSubmit = (data : Certificate) => {
     setCertificates([...certificates, data]);
     toast({
       title: "Certificate added",
@@ -59,9 +77,17 @@ export default function AdminPanel() {
                 ) : (
                   <ul className="space-y-2">
                     {projects.map((project, index) => (
-                      <li key={index} className="border-b pb-2">
-                        <h4 className="font-medium">{project.title}</h4>
-                        <p className="text-sm text-muted-foreground">{project.description}</p>
+                      <li key={index} className="border-b pb-2 flex">
+                        <div className="flex-col flex gap-3 flex-grow">
+                          <h4 className="font-medium">{project.proj_name}</h4>
+                          <p className="text-sm text-muted-foreground">{project.proj_desc}</p>
+                        </div>
+                        <div className="flex gap-4">
+                          <Link href={`/admin/project/${project.proj_id}`}>
+                            <Button variant="ghost" size="sm"><EditIcon /></Button>
+                          </Link>
+                          <Button variant="ghost" size="sm"><DeleteIcon /></Button>
+                        </div>
                       </li>
                     ))}
                   </ul>
@@ -79,9 +105,17 @@ export default function AdminPanel() {
                 ) : (
                   <ul className="space-y-2">
                     {certificates.map((certificate, index) => (
-                      <li key={index} className="border-b pb-2">
-                        <h4 className="font-medium">{certificate.title}</h4>
-                        <p className="text-sm text-muted-foreground">{certificate.issuer}</p>
+                      <li key={index} className="border-b pb-2 flex">
+                        <div className="flex-col flex gap-3 flex-grow">
+                          <h4 className="font-medium">{certificate.cert_name}</h4>
+                          <p className="text-sm text-muted-foreground">{certificate.cert_desc}</p>
+                        </div>
+                        <div className="flex gap-4">
+                          <Link href={`/admin/certificate/${certificate.cert_id}`}>
+                            <Button variant="ghost" size="sm"><EditIcon /></Button>
+                          </Link>
+                          <Button variant="ghost" size="sm"><DeleteIcon /></Button>
+                        </div>
                       </li>
                     ))}
                   </ul>
