@@ -5,6 +5,7 @@ import { NextResponse } from "next/server";
 export async function GET(request: Request) {
   try {
     const result = await findAllProjects();
+    console.log(result)
     if (!result) {
       return NextResponse.json(
         { message: "Project not found" },

@@ -10,12 +10,14 @@ import { Certificate, Project } from "@/lib/types";
 
 export default async function Home() {
   // Buscando os projetos da API
-  let res = await fetch('http://localhost:3000/api/projects', {
+  console.log("to aqui")
+  let res = await fetch(`${process.env.NEXT_URL}/api/projects`, {
     cache: 'no-store',
   });
+  
   const projects: Project[] = await res.json();
 
-  res = await fetch('http://localhost:3000/api/certificates', {
+  res = await fetch(`${process.env.NEXT_URL}/api/certificates`, {
     cache: 'no-store',
   });
   const certificates : Certificate[] = await res.json(); 
