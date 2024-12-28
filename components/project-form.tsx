@@ -15,9 +15,12 @@ const projectSchema = z.object({
   image: z.string().url("Must be a valid URL"),
   link: z.string().url("Must be a valid URL"),
   tags: z.string(),
+  github: z.string().url("Must be a valid url"),
 });
 
-export function ProjectForm({ onSubmit }) {
+
+
+export function ProjectForm({ onSubmit } : {onSubmit : (formattedValues : Object) => void} ) {
   const form = useForm<z.infer<typeof projectSchema>>({
     resolver: zodResolver(projectSchema),
     defaultValues: {
@@ -26,6 +29,7 @@ export function ProjectForm({ onSubmit }) {
       image: "",
       link: "",
       tags: "",
+      github : ""
     },
   });
 
@@ -99,6 +103,21 @@ export function ProjectForm({ onSubmit }) {
                 </FormItem>
               )}
             />
+            <FormField
+              control={form.control}
+              name="github"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Github Project URL</FormLabel>
+                  <FormControl>
+                    <Input placeholder="https://github.com/gustavodscruz/portfolio" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            >
+
+            </FormField>
             <FormField
               control={form.control}
               name="tags"
