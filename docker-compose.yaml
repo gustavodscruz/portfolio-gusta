@@ -4,6 +4,7 @@ services:
     working_dir: /usr/src/app
     volumes:
       - .:/usr/src/app
+      - /usr/src/app/node_modules
     environment:
       - DATABASE_HOST=mysql
       - DB_HOST = 172.18.0.1
